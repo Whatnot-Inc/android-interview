@@ -1,22 +1,33 @@
 package com.whatnot.productcatalog
 
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.whatnot.productcatalog.ProductsAdapter.ViewHolder
+import com.whatnot.productcatalog.databinding.ProductItemBinding
 
-class ProductsAdapter : RecyclerView.Adapter<ViewHolder>() {
+class ProductsAdapter(private val items: List<Product>) : RecyclerView.Adapter<ViewHolder>() {
+  data class Product(
+    val isStarred: Boolean,
+    val text: CharSequence
+  )
+
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-    TODO("Not yet implemented")
+    val itemView = LayoutInflater.from(parent.context)
+      .inflate(R.layout.product_item, parent, false)
+    return ViewHolder(itemView)
   }
 
-  override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-    TODO("Not yet implemented")
+  override fun onBindViewHolder(holder: ViewHolder, position: Int) = with(holder.binding) {
+    val product = items[position]
+    productText.text = product.text
+    productSwitch.isChecked = product.isStarred
   }
 
-  override fun getItemCount(): Int {
-    TODO("Not yet implemented")
-  }
+  override fun getItemCount(): Int = items.size
 
-  class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+  data class ViewHolder(val itemView: View) : RecyclerView.ViewHolder(itemView) {
+    val binding: ProductItemBinding = ProductItemBinding.bind(itemView)
+  }
 }
